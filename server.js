@@ -406,12 +406,21 @@ const otpLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
   max: 3, // max 3 OTPs per 10 mins
   keyGenerator: (req) => {
-    return req.body.email || req.ip; // fallback to IP if email missing
+    return req.body.email; // fallback to IP if email missing
   },
   message: {
     success: false,
     message: `Too many OTP requests. Please try again in 10 minutes.`,
   },
+});
+
+app.get("/test-db", async (req, res) => {
+  try {
+    const result = await mongoose.connection.db.admin().ping();
+    res.send({ success: true, result });
+  } catch (error) {
+    res.status(500).send({ success: false, error: error.message });
+  }
 });
 
 app.post("/api/signup", otpLimiter, async (req, res) => {
