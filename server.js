@@ -476,7 +476,7 @@ app.post("/api/signup", otpLimiter, async (req, res) => {
       password: hashedPassword,
       role,
       voatId,
-      voatPoints: 0,
+      voatPoints: 500, //Add voatpoints 500 after successfully register with new user
       badge: "bronze",
       isVerified: false,
     });
